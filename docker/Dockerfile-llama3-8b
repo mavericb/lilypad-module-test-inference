@@ -34,9 +34,7 @@ RUN curl -L -o /app/model/phi-2/config.json https://huggingface.co/microsoft/phi
     curl -L -o /app/model/phi-2/tokenizer_config.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer_config.json
 
 # Verify the downloaded files
-RUN ls -lh /app/model/phi-2 && \
-    echo "File sizes:" && \
-    du -sh /app/model/phi-2/* \
+RUN ls -lh /app/model/phi-2 && echo "File sizes:" && du -sh /app/model/phi-2/*
 
 # Copy application files
 COPY Dockerfile-llama3-8b /app/Dockerfile-llama3-8b
