@@ -17,29 +17,11 @@ RUN apt-get update -y && \
 COPY requirements.txt /app/requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Download image at build time
-#RUN curl -o /app/image.jpg https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI
-
-# Create directory for the model
-RUN mkdir -p /app/model/phi-2
-
-# Create directory for the model
-RUN mkdir -p /app/model/phi-2
-
-# Download model files using curl
-RUN echo 'from transformers import AutoModelForCausalLM, AutoTokenizer\n\
-model = AutoModelForCausalLM.from_pretrained("microsoft/phi-2")\n\
-tokenizer = AutoTokenizer.from_pretrained("microsoft/phi-2")\n\
-model.save_pretrained("/app/model/phi-2")\n\
-tokenizer.save_pretrained("/app/model/phi-2")' > download_model.py
-
-# Verify the downloaded files
-RUN ls -lh /app/model/phi-2 && echo "File sizes:" && du -sh /app/model/phi-2/*
+# Download Phi-2 model at build time
+RUN python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='microsoft/phi-2')"
 
 # Copy application files
-COPY Dockerfile-llama3-8b /app/Dockerfile-llama3-8b
 COPY main.py /app/main.py
-COPY requirements.txt /app/requirements.txt
 COPY start.sh /app/start.sh
 
 RUN ls -la /app
@@ -47,5 +29,5 @@ RUN ls -la /app
 # Make start.sh executable
 RUN chmod +x /app/start.sh
 
-# Set the entrypoint #
+# Set the entrypoint
 ENTRYPOINT ["/app/start.sh"]
