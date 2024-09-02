@@ -1,2 +1,4 @@
 transformers
 torch
+Pillow==8.4.0
+
