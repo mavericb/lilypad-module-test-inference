@@ -15,8 +15,8 @@ def process_image():
 
 def generate_text():
     print("Generating text with Phi-2 model...")
-    model = AutoModelForCausalLM.from_pretrained("/root/.cache/huggingface/hub/models--microsoft--phi-2")
-    tokenizer = AutoTokenizer.from_pretrained("/root/.cache/huggingface/hub/models--microsoft--phi-2")
+    model = AutoModelForCausalLM.from_pretrained("/app/phi-2")
+    tokenizer = AutoTokenizer.from_pretrained("/app/phi-2")
 
     prompt = 'Can you help me write a formal email to a potential business partner proposing a joint venture?'
     inputs = tokenizer(prompt, return_tensors="pt", return_attention_mask=False)
