@@ -17,8 +17,18 @@ RUN apt-get update -y && \
 COPY requirements.txt /app/requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Download Phi-2 model at build time and move it to /app
-RUN python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='microsoft/phi-2', local_dir='/app/phi-2')"
+# Create a Python script for verbose downloading
+RUN echo '\
+from huggingface_hub import snapshot_download\n\
+import sys\n\
+def progress_bar_callback(current, total):\n\
+    sys.stdout.write(f"\rDownloading: {current}/{total} files")\n\
+    sys.stdout.flush()\n\
+snapshot_download(repo_id="crumb/nano-mistral", local_dir="/app/nano-mistral", max_workers=1, progress_bar_callback=progress_bar_callback)\n\
+print("\nDownload complete!")' > /app/download_model.py
+
+# Run the verbose download script
+RUN python3 /app/download_model.py
 
 # Download image at build time
 RUN curl -o /app/image.jpg https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI

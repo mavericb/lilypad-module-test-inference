@@ -14,9 +14,9 @@ def process_image():
         print("Image not found")
 
 def generate_text():
-    print("Generating text with Phi-2 model...")
-    model = AutoModelForCausalLM.from_pretrained("/app/phi-2")
-    tokenizer = AutoTokenizer.from_pretrained("/app/phi-2")
+    print("Generating text with nano-mistral model...")
+    model = AutoModelForCausalLM.from_pretrained("/app/nano-mistral")
+    tokenizer = AutoTokenizer.from_pretrained("/app/nano-mistral")
 
     prompt = 'Can you help me write a formal email to a potential business partner proposing a joint venture?'
     inputs = tokenizer(prompt, return_tensors="pt", return_attention_mask=False)
