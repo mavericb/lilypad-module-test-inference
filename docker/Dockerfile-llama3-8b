@@ -27,11 +27,11 @@ RUN mkdir -p /app/model/phi-2
 RUN mkdir -p /app/model/phi-2
 
 # Download model files using curl
-RUN curl -L -o /app/model/phi-2/config.json https://huggingface.co/microsoft/phi-2/resolve/main/config.json && \
-    curl -L -o /app/model/phi-2/generation_config.json https://huggingface.co/microsoft/phi-2/resolve/main/generation_config.json && \
-    curl -L -o /app/model/phi-2/pytorch_model.bin https://huggingface.co/microsoft/phi-2/resolve/main/pytorch_model.bin && \
-    curl -L -o /app/model/phi-2/tokenizer.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer.json && \
-    curl -L -o /app/model/phi-2/tokenizer_config.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer_config.json
+RUN echo 'from transformers import AutoModelForCausalLM, AutoTokenizer\n\
+model = AutoModelForCausalLM.from_pretrained("microsoft/phi-2")\n\
+tokenizer = AutoTokenizer.from_pretrained("microsoft/phi-2")\n\
+model.save_pretrained("/app/model/phi-2")\n\
+tokenizer.save_pretrained("/app/model/phi-2")' > download_model.py
 
 # Verify the downloaded files
 RUN ls -lh /app/model/phi-2 && echo "File sizes:" && du -sh /app/model/phi-2/*
