@@ -23,13 +23,20 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Create directory for the model
 RUN mkdir -p /app/model/phi-2
 
-# Download model files using curl
-RUN curl -o /app/model/phi-2/config.json https://huggingface.co/microsoft/phi-2/resolve/main/config.json
-RUN curl -o /app/model/phi-2/generation_config.json https://huggingface.co/microsoft/phi-2/resolve/main/generation_config.json
-RUN curl -o /app/model/phi-2/pytorch_model.bin https://huggingface.co/microsoft/phi-2/resolve/main/pytorch_model.bin
-RUN curl -o /app/model/phi-2/tokenizer.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer.json
-RUN curl -o /app/model/phi-2/tokenizer_config.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer_config.json
+# Create directory for the model
+RUN mkdir -p /app/model/phi-2
 
+# Download model files using curl
+RUN curl -L -o /app/model/phi-2/config.json https://huggingface.co/microsoft/phi-2/resolve/main/config.json && \
+    curl -L -o /app/model/phi-2/generation_config.json https://huggingface.co/microsoft/phi-2/resolve/main/generation_config.json && \
+    curl -L -o /app/model/phi-2/pytorch_model.bin https://huggingface.co/microsoft/phi-2/resolve/main/pytorch_model.bin && \
+    curl -L -o /app/model/phi-2/tokenizer.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer.json && \
+    curl -L -o /app/model/phi-2/tokenizer_config.json https://huggingface.co/microsoft/phi-2/resolve/main/tokenizer_config.json
+
+# Verify the downloaded files
+RUN ls -lh /app/model/phi-2 && \
+    echo "File sizes:" && \
+    du -sh /app/model/phi-2/* \
 
 # Copy application files
 COPY Dockerfile-llama3-8b /app/Dockerfile-llama3-8b
